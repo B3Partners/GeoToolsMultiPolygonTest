@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/26623/rsgb/trunk/brk-loader/src/main/resources/xsl
+END
+example.XML
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/26364/rsgb/trunk/brk-loader/src/main/resources/xsl/example.XML
+END
+snapshot-to-rsgb-xml.XSL
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/26623/rsgb/trunk/brk-loader/src/main/resources/xsl/snapshot-to-rsgb-xml.XSL
+END

@@ -4,3 +4,5 @@
 *.jar
 *.war
 *.ear
+/GeotoolsMultiPolygonTest/nbproject/private/
+/GeoToolsMultiPolygonTest/target/

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="snapshot-to-rsgb-xml.XSL"?>
+<Snapshot:KadastraalObjectSnapshot xmlns:Snapshot="http://www.kadaster.nl/schemas/brk-levering/snapshot/v20120901">
+	<Snapshot:referentie>30E54DCAA450-1D3C7E1EEFF</Snapshot:referentie>
+	<Snapshot:toestandsdatum>2009-10-31</Snapshot:toestandsdatum>
+	<KadastraalObject:Perceel xmlns:KadastraalObject="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-kadastraalobject/v20120701" id="ID.50901682">
+		<KadastraalObject:identificatie>
+			<NEN3610:namespace xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">NL.KAD.OnroerendeZaak</NEN3610:namespace>
+			<NEN3610:lokaalId xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">53761410770000</NEN3610:lokaalId>
+		</KadastraalObject:identificatie>
+		<KadastraalObject:heeftLocatie>
+			<KadastraalObject:LocatieKadastraalObject>
+				<KadastraalObject:adres>
+					<Adres:KADBinnenlandsAdres xmlns:Adres="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-adres/v20120201">
+						<Adres:openbareRuimteNaam>PR CLAUSPLNTS</Adres:openbareRuimteNaam>
+						<Adres:huisNummer>1</Adres:huisNummer>
+						<Adres:woonplaatsNaam>ASSEN</Adres:woonplaatsNaam>
+					</Adres:KADBinnenlandsAdres>
+				</KadastraalObject:adres>
+			</KadastraalObject:LocatieKadastraalObject>
+			<KadastraalObject:LocatieKadastraalObject>
+				<KadastraalObject:adres>
+					<Adres:KADBinnenlandsAdres xmlns:Adres="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-adres/v20120201">
+						<Adres:openbareRuimteNaam>PR CLAUSPLNTS</Adres:openbareRuimteNaam>
+						<Adres:huisNummer>3</Adres:huisNummer>
+						<Adres:woonplaatsNaam>ASSEN</Adres:woonplaatsNaam>
+					</Adres:KADBinnenlandsAdres>
+				</KadastraalObject:adres>
+			</KadastraalObject:LocatieKadastraalObject>
+		</KadastraalObject:heeftLocatie>
+		<KadastraalObject:kadastraleAanduiding>
+			<KadastraalObject:AKRKadastraleGemeenteCode>
+				<Typen:code xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">106</Typen:code>
+				<Typen:waarde xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">ASN00</Typen:waarde>
+			</KadastraalObject:AKRKadastraleGemeenteCode>
+			<KadastraalObject:naamKadastraleGemeente>
+				<Typen:code xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">59</Typen:code>
+				<Typen:waarde xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">Assen</Typen:waarde>
+			</KadastraalObject:naamKadastraleGemeente>
+			<KadastraalObject:sectie>I</KadastraalObject:sectie>
+			<KadastraalObject:perceelnummer>14107</KadastraalObject:perceelnummer>
+		</KadastraalObject:kadastraleAanduiding>
+		<KadastraalObject:aardCultuurOnbebouwd>
+			<Typen:code xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">57</Typen:code>
+			<Typen:waarde xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">Erf - Tuin</Typen:waarde>
+		</KadastraalObject:aardCultuurOnbebouwd>
+		<KadastraalObject:ontstaanUitOZ>
+			<KadastraalObject:OnroerendeZaakFiliatie>
+				<KadastraalObject:aard>
+					<Typen:code xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">14</Typen:code>
+					<Typen:waarde xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">Vernummering</Typen:waarde>
+				</KadastraalObject:aard>
+				<KadastraalObject:overgangsgrootte>11</KadastraalObject:overgangsgrootte>
+				<KadastraalObject:onroerendeZaak>
+					<KadastraalObjectRef:PerceelRef xmlns:KadastraalObjectRef="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-kadastraalobject-ref/v20120201" xlink:href="NL.KAD.OnroerendeZaak.53761409040006"/>
+				</KadastraalObject:onroerendeZaak>
+			</KadastraalObject:OnroerendeZaakFiliatie>
+			<KadastraalObject:OnroerendeZaakFiliatie>
+				<KadastraalObject:aard>
+					<Typen:code xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">14</Typen:code>
+					<Typen:waarde xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">Vernummering</Typen:waarde>
+				</KadastraalObject:aard>
+				<KadastraalObject:onroerendeZaak>
+					<KadastraalObjectRef:PerceelRef xmlns:KadastraalObjectRef="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-kadastraalobject-ref/v20120201" xlink:href="NL.KAD.OnroerendeZaak.53761409040008"/>
+				</KadastraalObject:onroerendeZaak>
+			</KadastraalObject:OnroerendeZaakFiliatie>
+		</KadastraalObject:ontstaanUitOZ>
+		<KadastraalObject:begrenzingPerceel>
+			<gml:Surface xmlns:gml="http://www.opengis.net/gml" srsName="urn:ogc:def:crs:EPSG::28992">
+				<gml:patches>
+					<gml:PolygonPatch>
+						<gml:exterior>
+							<gml:LinearRing>
+								<gml:posList srsDimension="2" count="7">233930.389 556497.228 233931.192 556497.812 233932.19 556498.538 233929.727 556500.874 233924.297 556506.488 233928.65 556500.05 233930.389 556497.228</gml:posList>
+							</gml:LinearRing>
+						</gml:exterior>
+					</gml:PolygonPatch>
+				</gml:patches>
+			</gml:Surface>
+		</KadastraalObject:begrenzingPerceel>
+		<KadastraalObject:indicatieDeelperceel>false</KadastraalObject:indicatieDeelperceel>
+		<KadastraalObject:kadastraleGrootte>
+			<KadastraalObject:waarde>11</KadastraalObject:waarde>
+		</KadastraalObject:kadastraleGrootte>
+		<KadastraalObject:soortGrootte>
+			<Typen:code xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">1</Typen:code>
+			<Typen:waarde xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">Vastgesteld</Typen:waarde>
+		</KadastraalObject:soortGrootte>
+		<KadastraalObject:perceelnummerVerschuiving>
+			<KadastraalObject:deltaX>12.68</KadastraalObject:deltaX>
+			<KadastraalObject:deltaY>-1.865</KadastraalObject:deltaY>
+		</KadastraalObject:perceelnummerVerschuiving>
+		<KadastraalObject:plaatscoordinaten>
+			<gml:Point xmlns:gml="http://www.opengis.net/gml" srsName="urn:ogc:def:crs:EPSG::28992">
+				<gml:pos>233930.442 556498.918</gml:pos>
+			</gml:Point>
+		</KadastraalObject:plaatscoordinaten>
+	</KadastraalObject:Perceel>
+	<Recht:ZakelijkRecht xmlns:Recht="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-recht/v20120201" id="ID.51575547">
+		<Recht:identificatie>
+			<NEN3610:namespace xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">NL.KAD.ZakelijkRecht</NEN3610:namespace>
+			<NEN3610:lokaalId xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">AKR1.100000000795675</NEN3610:lokaalId>
+		</Recht:identificatie>
+		<Recht:aard>
+			<Typen:code xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">2</Typen:code>
+			<Typen:waarde xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">Eigendom (recht van)</Typen:waarde>
+		</Recht:aard>
+		<Recht:rustOp>
+			<KadastraalObjectRef:PerceelRef xmlns:KadastraalObjectRef="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-kadastraalobject-ref/v20120201" xlink:href="#ID.50901682"/>
+		</Recht:rustOp>
+	</Recht:ZakelijkRecht>
+	<Recht:Tenaamstelling xmlns:Recht="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-recht/v20120201" id="ID.65484805">
+		<Recht:identificatie>
+			<NEN3610:namespace xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">NL.KAD.Tenaamstelling</NEN3610:namespace>
+			<NEN3610:lokaalId xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">AKR1.100000000795675</NEN3610:lokaalId>
+		</Recht:identificatie>
+		<Recht:isGebaseerdOp>
+			<StukRef:StukdeelRef xmlns:StukRef="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-stuk-ref/v20120201" xlink:href="#ID.65504645"/>
+		</Recht:isGebaseerdOp>
+		<Recht:vanPersoon>
+			<PersoonRef:KADNietNatuurlijkPersoonRef xmlns:PersoonRef="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-persoon-ref/v20120201" xlink:href="#ID.65494925"/>
+		</Recht:vanPersoon>
+		<Recht:aandeel>
+			<Recht:teller>1</Recht:teller>
+			<Recht:noemer>1</Recht:noemer>
+		</Recht:aandeel>
+		<Recht:van>
+			<RechtRef:ZakelijkRechtRef xmlns:RechtRef="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-recht-ref/v20120201" xlink:href="#ID.51575547"/>
+		</Recht:van>
+	</Recht:Tenaamstelling>
+	<Persoon:KADNietNatuurlijkPersoon xmlns:Persoon="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-persoon/v20120201" id="ID.65494925">
+		<Persoon:identificatie>
+			<NEN3610:namespace xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">NL.KAD.Persoon</NEN3610:namespace>
+			<NEN3610:lokaalId xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">321422052</NEN3610:lokaalId>
+		</Persoon:identificatie>
+		<Persoon:naam>mandeligheid betreft prins clausplantsoen 1 en 3 te assen</Persoon:naam>
+		<Persoon:rechtsvorm>
+			<Typen:code xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">15</Typen:code>
+			<Typen:waarde xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">Mandeligheid</Typen:waarde>
+		</Persoon:rechtsvorm>
+		<Persoon:statutaireZetel>ASSEN</Persoon:statutaireZetel>
+	</Persoon:KADNietNatuurlijkPersoon>
+	<Stuk:Kadasterstuk xmlns:Stuk="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-stuk/v20120201" id="ID.65500261">
+		<Stuk:identificatie>
+			<NEN3610:namespace xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">NL.KAD.Kadasterstuk</NEN3610:namespace>
+			<NEN3610:lokaalId xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">AKR1.100000000201603</NEN3610:lokaalId>
+		</Stuk:identificatie>
+		<Stuk:omvat>
+			<Stuk:Stukdeel id="ID.65504645">
+				<Stuk:identificatie>
+					<NEN3610:namespace xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">NL.KAD.Stukdeel</NEN3610:namespace>
+					<NEN3610:lokaalId xmlns:NEN3610="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201">AKR1.100000000769966</NEN3610:lokaalId>
+				</Stuk:identificatie>
+				<Stuk:aardStukdeel>
+					<Typen:code xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">107</Typen:code>
+					<Typen:waarde xmlns:Typen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201">Metingstaat KAD 75 m.b.t. vernummering (matrix)</Typen:waarde>
+				</Stuk:aardStukdeel>
+			</Stuk:Stukdeel>
+		</Stuk:omvat>
+		<Stuk:AKRPortefeuilleNr>75 ASN0002009051</Stuk:AKRPortefeuilleNr>
+	</Stuk:Kadasterstuk>
+</Snapshot:KadastraalObjectSnapshot>

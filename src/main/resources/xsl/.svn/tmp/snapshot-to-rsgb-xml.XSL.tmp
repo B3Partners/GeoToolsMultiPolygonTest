@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" 
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                xmlns:snp="http://www.kadaster.nl/schemas/brk-levering/snapshot/v20120901"
+                xmlns:ko="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-kadastraalobject/v20120701"
+                xmlns:typ="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201"
+                xmlns:nen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201"
+<<<<<<< .mine
+                xmlns:gml="http://www.opengis.net/gml"
+                xmlns:recht="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-recht/v20120201" >
+=======
+                xmlns:gml="http://www.opengis.net/gml"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
+>>>>>>> .r26382
+    
+
+    <xsl:template match="/">
+        <root>
+            <data>
+                <xsl:apply-templates select="/snp:KadastraalObjectSnapshot/ko:Perceel"/>
+                <xsl:apply-templates select="/snp:KadastraalObjectSnapshot/ko:Appartementsrecht"/>
+                <xsl:apply-templates select="/snp:KadastraalObjectSnapshot/recht:ZakelijkRecht"/>
+            </data>
+        </root>
+    </xsl:template>
+    
+    <xsl:template match="/snp:KadastraalObjectSnapshot/ko:Perceel">
+        <xsl:call-template name="kadastraal_onroerende_zaak">
+            <xsl:with-param name="oz" select="."/>
+        </xsl:call-template>
+        
+<<<<<<< .mine
+        <KAD_PERCEEL>       
+            <PK_KAD_ONRRND_ZAAK>
+                <xsl:value-of select="./ko:identificatie/nen:lokaalId"/>
+            </PK_KAD_ONRRND_ZAAK> 
+=======
+        <KAD_PERCEEL>        
+>>>>>>> .r26382
+            <KA_KAD_GEMEENTECODE>
+                <xsl:value-of select="./ko:kadastraleAanduiding/ko:naamKadastraleGemeente/typ:code"/>
+            </KA_KAD_GEMEENTECODE>
+            <KA_SECTIE>
+              <xsl:value-of select="./ko:kadastraleAanduiding/ko:sectie"/>
+            </KA_SECTIE>
+            <KA_PERCEELNUMMER>
+              <xsl:value-of select="./ko:kadastraleAanduiding/ko:perceelnummer"/>
+            </KA_PERCEELNUMMER>
+            <BEGRENZING_PERCEEL>
+              <xsl:copy-of select="./ko:begrenzingPerceel/gml:Surface"/>
+            </BEGRENZING_PERCEEL>
+            <GROOTTE_PERCEEL>
+              <xsl:value-of select="./ko:kadastraleGrootte/ko:waarde"/>
+            </GROOTTE_PERCEEL>
+            <AAND_SORT_GROOTTE>
+              <xsl:value-of select="./ko:soortGrootte"/>
+            </AAND_SORT_GROOTTE>
+            <OMSCHR_DEELPERCEEL>
+              <xsl:value-of select="./ko:omschrijvingDeelpercelen"/>
+            </OMSCHR_DEELPERCEEL>
+            <PLAATSCOORDINATEN_PERCEEL>
+              <xsl:copy-of select="./ko:plaatscoordinaten/gml:Point"/>
+            </PLAATSCOORDINATEN_PERCEEL> 
+        </KAD_PERCEEL>
+    </xsl:template>
+
+
+    <xsl:template match="/snp:KadastraalObjectSnapshot/ko:Appartementsrecht">
+        <xsl:param name="appartementsrecht"/>
+        <xsl:call-template name="kadastraal_onroerende_zaak">
+            <xsl:with-param name="oz" select="."/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template name="kadastraal_onroerende_zaak">
+        <xsl:param name="oz"/>        
+        <KAD_ONRRND_ZAAK>
+            <KAD_IDENTIF>
+                <xsl:value-of select="$oz/ko:identificatie/nen:lokaalId"/>
+            </KAD_IDENTIF>
+            <KS_BEDRAG>
+                <xsl:value-of select="$oz/ko:koopsom/ko:bedrag/typ:som"/>
+            </KS_BEDRAG>
+            <KS_VALUTASOORT>
+                <xsl:value-of select="$oz/ko:koopsom/ko:bedrag/typ:valuta/typ:code"/>
+            </KS_VALUTASOORT>
+            <xsl:if test="$oz/ko:koopsom/ko:koopjaar">
+                <KS_KOOPJAAR>
+                    <xsl:value-of select="$oz/ko:koopsom/ko:koopjaar"/>
+                </KS_KOOPJAAR>
+            </xsl:if>
+            <KS_MEER_ONROERENDGOED>
+                <xsl:value-of select="$oz/ko:koopsom/ko:indicatieMeerObjecten"/>
+            </KS_MEER_ONROERENDGOED>
+            <CU_AARD_BEBOUWING>
+                <xsl:value-of select="$oz/ko:heeftLocatie/ko:LocatieKadastraalObject/ko:cultuurBebouwd/ko:code"/>
+            </CU_AARD_BEBOUWING>
+            <CU_AARD_CULTUUR_ONBEBOUWD>
+                <xsl:value-of select="$oz/ko:aardCultuurOnbebouwd/typ:waarde"/>
+            </CU_AARD_CULTUUR_ONBEBOUWD>
+        
+        </KAD_ONRRND_ZAAK>
+    </xsl:template>
+    
+    <xsl:template match="/snp:KadastraalObjectSnapshot/recht:ZakelijkRecht">
+        <ZAK_RECHT>
+            <KADASTER_IDENTIF>
+                <xsl:value-of select="recht:identificatie/nen:lokaalId"/>
+            </KADASTER_IDENTIF>
+            <AAND_AARD_VERKREGEN_RECHT>
+                <xsl:value-of select="recht:aard/typ:code"/>
+            </AAND_AARD_VERKREGEN_RECHT>
+            <AAND_AARD_RECHT_VERKORT>
+                <xsl:value-of select="recht:aard/typ:waarde"/>
+            </AAND_AARD_RECHT_VERKORT>
+            <INDIC_BETROKKEN_IN_SPLITSING>
+                <xsl:choose>
+                    <xsl:when test="recht/betrokkenBij">Ja</xsl:when>
+                    <xsl:otherwise>Nee</xsl:otherwise>
+                </xsl:choose>
+            </INDIC_BETROKKEN_IN_SPLITSING>
+        </ZAK_RECHT>
+    </xsl:template>
+</xsl:stylesheet>

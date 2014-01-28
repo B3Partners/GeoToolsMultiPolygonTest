@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:snp="http://www.kadaster.nl/schemas/brk-levering/snapshot/v20120901" 
+                xmlns:ko="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-kadastraalobject/v20120701"
+                xmlns:typ="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-typen/v20120201" 
+                xmlns:nen="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-NEN3610-2011/v20120201" 
+                xmlns:gml="http://www.opengis.net/gml" 
+                xmlns:xlink="http://www.w3.org/1999/xlink" 
+                xmlns:recht="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-recht/v20120201" 
+                xmlns:rechtref="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-recht-ref/v20120201"
+                xmlns:pers="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-persoon/v20120201"
+                xmlns:nhr="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-nhr-rechtspersoon/v20120201"
+                xmlns:gba="http://www.kadaster.nl/schemas/brk-levering/snapshot/imkad-gba-persoon/v20120901">
+    <xsl:variable name="kad_oz_id" select="/snp:KadastraalObjectSnapshot/ko:Perceel/ko:identificatie/nen:lokaalId | /snp:KadastraalObjectSnapshot/ko:Appartementsrecht/ko:identificatie/nen:lokaalId"/>
+    <xsl:variable name="persoonId"/>
+    <xsl:template match="/">
+        <root>
+            <data>
+                <xsl:apply-templates select="/snp:KadastraalObjectSnapshot/ko:Perceel"/>
+                <xsl:apply-templates select="/snp:KadastraalObjectSnapshot/ko:Appartementsrecht"/>
+                <xsl:for-each select="/snp:KadastraalObjectSnapshot/recht:Tenaamstelling">
+                    <xsl:apply-templates select="."/>
+                </xsl:for-each>
+                <xsl:for-each select="/snp:KadastraalObjectSnapshot/recht:ZakelijkRecht">
+					<!-- alleen de zakelijkrechten zonder tenaamstellingen-->
+                    <xsl:if test="not(/snp:KadastraalObjectSnapshot/recht:Tenaamstelling/recht:van/rechtref:ZakelijkRechtRef/@*[local-name() = 'href'] = concat('#',@id))">
+                        <ZAK_RECHT>
+							<KADASTER_IDENTIF>
+								<xsl:call-template name="nen_identificatie">
+									<xsl:with-param name="id" select="recht:identificatie"/>
+								</xsl:call-template>	
+							</KADASTER_IDENTIF>
+                            <xsl:call-template name="zakelijk_recht">
+                                <xsl:with-param name="zr" select="."/>
+                            </xsl:call-template>
+                        </ZAK_RECHT>
+                    </xsl:if>                        					
+                </xsl:for-each>
+                <xsl:for-each select="/snp:KadastraalObjectSnapshot/recht:Aantekening">
+					<xsl:apply-templates select="."/>
+                </xsl:for-each>
+                
+                <xsl:for-each select="/snp:KadastraalObjectSnapshot/pers:*">
+                    <xsl:apply-templates select="."/>
+                </xsl:for-each>
+                
+                <xsl:for-each select="/snp:KadastraalObjectSnapshot/gba:*">
+                    <xsl:apply-templates select="."/>
+                </xsl:for-each>
+            </data>
+        </root>
+    </xsl:template>
+    <xsl:template match="/snp:KadastraalObjectSnapshot/ko:Perceel">
+        <xsl:call-template name="kadastraal_onroerende_zaak">
+            <xsl:with-param name="oz" select="."/>
+        </xsl:call-template>
+        <KAD_PERCEEL>
+            <PK_KAD_ONRRND_ZAAK>
+                <xsl:value-of select="ko:identificatie/nen:lokaalId"/>
+            </PK_KAD_ONRRND_ZAAK>
+            <KA_KAD_GEMEENTECODE>
+                <xsl:value-of select="ko:kadastraleAanduiding/ko:naamKadastraleGemeente/typ:code"/>
+            </KA_KAD_GEMEENTECODE>
+            <KA_SECTIE>
+                <xsl:value-of select="ko:kadastraleAanduiding/ko:sectie"/>
+            </KA_SECTIE>
+            <KA_PERCEELNUMMER>
+                <xsl:value-of select="ko:kadastraleAanduiding/ko:perceelnummer"/>
+            </KA_PERCEELNUMMER>
+            <BEGRENZING_PERCEEL>
+                <xsl:copy-of select="ko:begrenzingPerceel/gml:Surface"/>
+            </BEGRENZING_PERCEEL>
+            <GROOTTE_PERCEEL>
+                <xsl:value-of select="ko:kadastraleGrootte/ko:waarde"/>
+            </GROOTTE_PERCEEL>
+            <AAND_SOORT_GROOTTE>
+                <xsl:value-of select="ko:soortGrootte/typ:code"/>
+            </AAND_SOORT_GROOTTE>
+            <OMSCHR_DEELPERCEEL>
+                <xsl:value-of select="ko:omschrijvingDeelpercelen"/>
+            </OMSCHR_DEELPERCEEL>
+            <PLAATSCOORDINATEN_PERCEEL>
+                <xsl:copy-of select="ko:plaatscoordinaten/gml:Point"/>
+            </PLAATSCOORDINATEN_PERCEEL>
+        </KAD_PERCEEL>
+    </xsl:template>
+    <xsl:template match="/snp:KadastraalObjectSnapshot/ko:Appartementsrecht">
+        <xsl:call-template name="kadastraal_onroerende_zaak">
+            <xsl:with-param name="oz" select="."/>
+        </xsl:call-template>
+    </xsl:template>
+    <xsl:template name="kadastraal_onroerende_zaak">
+        <xsl:param name="oz"/>
+        <KAD_ONRRND_ZAAK>
+			<!-- XXX -->
+			<DATUM_BEGIN_GELDH>2013-09-06</DATUM_BEGIN_GELDH>
+            <KAD_IDENTIF>
+                <xsl:value-of select="$oz/ko:identificatie/nen:lokaalId"/>
+            </KAD_IDENTIF>
+            <KS_BEDRAG>
+                <xsl:value-of select="$oz/ko:koopsom/ko:bedrag/typ:som"/>
+            </KS_BEDRAG>
+            <KS_VALUTASOORT>
+				<!-- TODO: zoek waarde op van groepsattribuut 
+                  Toelichting RSGB: "De attribuutsort maakt deel uit van het groepattribuutsoort 
+                  Koopsom en is afgeleid van het subdomein CurrencyID van het domein Koopsom in 
+                  de catalogus BRK. Zie verder de toelichting in de BRK.
+				-->
+				0
+                <!--xsl:value-of select="$oz/ko:koopsom/ko:bedrag/typ:valuta/typ:code"/-->
+            </KS_VALUTASOORT>
+            <xsl:if test="$oz/ko:koopsom/ko:koopjaar">
+                <KS_KOOPJAAR>
+                    <xsl:value-of select="$oz/ko:koopsom/ko:koopjaar"/>
+                </KS_KOOPJAAR>
+            </xsl:if>
+            <KS_MEER_ONROERENDGOED xsi:type="xs:boolean">
+                <xsl:value-of select="$oz/ko:koopsom/ko:indicatieMeerObjecten"/>
+            </KS_MEER_ONROERENDGOED>
+            <CU_AARD_BEBOUWING>
+                <xsl:value-of select="$oz/ko:heeftLocatie/ko:LocatieKadastraalObject/ko:cultuurBebouwd/ko:code"/>
+            </CU_AARD_BEBOUWING>
+            <CU_AARD_CULTUUR_ONBEBOUWD>
+                <xsl:value-of select="$oz/ko:aardCultuurOnbebouwd/typ:waarde"/>
+            </CU_AARD_CULTUUR_ONBEBOUWD>
+        </KAD_ONRRND_ZAAK>
+    </xsl:template>
+	
+    <xsl:template name="zakelijk_recht">
+        <xsl:param name="zr"/>
+        <FK1_KAD_ONRRND_ZAAK>
+			<xsl:value-of select="$kad_oz_id"/>
+		</FK1_KAD_ONRRND_ZAAK>        
+        <AAND_AARD_VERKREGEN_RECHT>
+            <xsl:value-of select="$zr/recht:aard/typ:code"/>
+        </AAND_AARD_VERKREGEN_RECHT>
+        <AAND_AARD_RECHT_VERKORT>
+            <xsl:value-of select="$zr/recht:aard/typ:waarde"/>
+        </AAND_AARD_RECHT_VERKORT>
+        <INDIC_BETROKKEN_IN_SPLITSING>
+            <xsl:choose>
+                <xsl:when test="$zr/recht/betrokkenBij">Ja</xsl:when>
+                <xsl:otherwise>Nee</xsl:otherwise>
+            </xsl:choose>
+        </INDIC_BETROKKEN_IN_SPLITSING>
+    </xsl:template>
+    
+    <xsl:template match="/snp:KadastraalObjectSnapshot/recht:Tenaamstelling">        
+        <xsl:variable name="zakRechtId" select="substring(recht:van/rechtref:ZakelijkRechtRef/@*[local-name() = 'href'],2)"/>        
+        
+        <ZAK_RECHT>
+			<KADASTER_IDENTIF>
+				<xsl:call-template name="nen_identificatie">
+					<xsl:with-param name="id" select="recht:identificatie"/>
+				</xsl:call-template>				
+			</KADASTER_IDENTIF>            
+            <AR_TELLER>
+                <xsl:value-of select="recht:aandeel/recht:teller"/>
+            </AR_TELLER>
+            <AR_NOEMER>
+                <xsl:value-of select="recht:aandeel/recht:noemer"/>
+            </AR_NOEMER>
+            <xsl:call-template name="zakelijk_recht">
+                <xsl:with-param name="zr" select="/snp:KadastraalObjectSnapshot/recht:ZakelijkRecht[@id = $zakRechtId]"/>
+            </xsl:call-template>
+        </ZAK_RECHT>
+    </xsl:template>
+    
+	<xsl:template match="/snp:KadastraalObjectSnapshot/recht:Aantekening">
+		<!--check of het een aantekening betreffende een onroerende zaak is of recht (of beide..)-->
+		<xsl:if test="recht:betreftAantekeningKadastraalObject" >
+			<KAD_ONRRND_ZAAK_AANTEK>
+				<FK1_KAD_ONRRND_ZAAK>
+					<xsl:value-of select="$kad_oz_id"/>
+				</FK1_KAD_ONRRND_ZAAK>
+				<KADASTER_IDENTIF_AANTEK>
+					<xsl:value-of select="recht:identificatie/nen:lokaalId"/>
+				</KADASTER_IDENTIF_AANTEK>
+				<AARD_AANTEK_KAD_OBJ>
+					<xsl:value-of select="recht:aard/typ:waarde"/>
+				</AARD_AANTEK_KAD_OBJ>
+				<EINDD_AANTEK_KAD_OBJ>
+					<xsl:value-of select="recht:einddatum"/>
+				</EINDD_AANTEK_KAD_OBJ>
+				<BESCHRIJVING_AANTEK_KAD_OBJ>
+					<xsl:value-of select="recht:omschrijving"/>
+				</BESCHRIJVING_AANTEK_KAD_OBJ>
+			</KAD_ONRRND_ZAAK_AANTEK>
+		</xsl:if>
+		<xsl:if test="recht:betreftAantekeningRecht" >
+			<ZAK_RECHT_AANTEK>			
+				<FK1_ZAK_RECHT>	
+				<xsl:variable name="tenaamId" select="substring(recht:betreftAantekeningRecht/recht:AantekeningRecht/recht:heeftBetrekkingOp/rechtref:TenaamstellingRef/@*[local-name() = 'href'],2)"/>		
+				<xsl:call-template name="nen_identificatie">
+					<xsl:with-param name="id" select="/snp:KadastraalObjectSnapshot/recht:Tenaamstelling[@id = $tenaamId]/recht:identificatie"/>
+					</xsl:call-template>
+				</FK1_ZAK_RECHT>
+				<KADASTER_IDENTIF_AANTEK_RECHT>
+					<xsl:value-of select="recht:identificatie/nen:lokaalId"/>
+				</KADASTER_IDENTIF_AANTEK_RECHT>
+				<AARD_AANTEK_RECHT>
+					<xsl:value-of select="recht:aard/typ:waarde"/>
+				</AARD_AANTEK_RECHT>
+				<EINDD_AANTEK_RECHT>
+					<xsl:value-of select="recht:einddatum"/>
+				</EINDD_AANTEK_RECHT>
+				<BESCHRIJVING_AANTEK_RECHT>
+					<xsl:value-of select="recht:omschrijving"/>
+				</BESCHRIJVING_AANTEK_RECHT>
+			</ZAK_RECHT_AANTEK>
+		</xsl:if>
+	</xsl:template>	
+    
+    <!--Persoon-->
+    <xsl:template match="/snp:KadastraalObjectSnapshot/pers:KADNatuurlijkPersoon">
+        <xsl:call-template name="persoon">
+            <xsl:with-param name="persoon" select="."/>
+        </xsl:call-template>
+        <NAT_PERSOON>
+            <PK_PERSOON>
+                <xsl:call-template name="nen_identificatie">
+					<xsl:with-param name="id" select="pers:identificatie"/>
+				</xsl:call-template>
+            </PK_PERSOON>
+            <GESLACHTSAAND>
+                <xsl:value-of select="pers:geslacht/typ:code"/>
+            </GESLACHTSAAND>
+            <NM_VOORNAMEN>
+                <xsl:value-of select="pers:voornamen"/>
+            </NM_VOORNAMEN>
+            <NM_VOORVOEGSEL_GESLACHTSNAAM>
+                <xsl:value-of select="pers:voorvoegselsGeslachtsnaam"/>
+            </NM_VOORVOEGSEL_GESLACHTSNAAM>
+            <NM_GESLACHTSNAAM>
+                <xsl:value-of select="pers:geslachtsnaam"/>
+            </NM_GESLACHTSNAAM>        
+        </NAT_PERSOON>
+        <ANDER_NAT_PERSOON>
+            <NUMMER>
+                <xsl:call-template name="nen_identificatie">
+					<xsl:with-param name="id" select="pers:identificatie"/>
+				</xsl:call-template>
+            </NUMMER>
+            <FK_NAT_PERSOON>
+                <xsl:call-template name="nen_identificatie">
+					<xsl:with-param name="id" select="pers:identificatie"/>
+				</xsl:call-template>
+            </FK_NAT_PERSOON>
+            <GEBOORTEDATUM>
+                <xsl:value-of select="pers:geboortedatum"/>
+            </GEBOORTEDATUM>
+            <OVERLIJDENSDATUM>
+                <xsl:value-of select="pers:datumOverlijden"/>
+            </OVERLIJDENSDATUM>
+        </ANDER_NAT_PERSOON>
+    </xsl:template>
+    
+    <xsl:template match="/snp:KadastraalObjectSnapshot/gba:Ingezetene">    
+        <xsl:call-template name="persoon">
+            <xsl:with-param name="persoon" select="."/>
+        </xsl:call-template>
+        <NAT_PERSOON>
+            <xsl:call-template name="geregistreerd_persoon-nat_persoon">
+                <xsl:with-param name="persoon" select="."/>
+            </xsl:call-template>
+        </NAT_PERSOON>
+        <INGESCHR_NAT_PERSOON>
+            <xsl:call-template name="geregistreerd_persoon-ingeschr_nat_persoon">
+                <xsl:with-param name="persoon" select="."/>
+            </xsl:call-template>
+        </INGESCHR_NAT_PERSOON>     
+    </xsl:template>
+    
+    <xsl:template match="/snp:KadastraalObjectSnapshot/gba:NietIngezetene">    
+        <xsl:call-template name="persoon">
+            <xsl:with-param name="persoon" select="."/>
+        </xsl:call-template>
+        <NAT_PERSOON>
+            <xsl:call-template name="geregistreerd_persoon-nat_persoon">
+                <xsl:with-param name="persoon" select="."/>
+            </xsl:call-template>
+        </NAT_PERSOON>
+        <INGESCHR_NAT_PERSOON>
+            <xsl:call-template name="geregistreerd_persoon-ingeschr_nat_persoon">
+                <xsl:with-param name="persoon" select="."/>
+            </xsl:call-template>
+            <LAND_WAARNAAR_VERTROKKEN>
+                <xsl:value-of select="gba:landWaarnaarVertrokken/typ:waarde"/>
+            </LAND_WAARNAAR_VERTROKKEN>
+        </INGESCHR_NAT_PERSOON>
+        <NIET_INGEZETENE>
+            <PK_INGESCHR_NAT_PERSOON>
+				<!-- in levering allemaal het zelfde, dus tijdelijk de lokaal id;-->
+				<!--xsl:value-of select="gba:BSN"/-->
+				<xsl:value-of select="pers:identificatie/nen:lokaalId"/>
+            </PK_INGESCHR_NAT_PERSOON>
+        </NIET_INGEZETENE>    
+    </xsl:template>
+    
+    <xsl:template match="/snp:KadastraalObjectSnapshot/pers:KADNietNatuurlijkPersoon">
+        <xsl:call-template name="persoon">
+            <xsl:with-param name="persoon" select="."/>
+        </xsl:call-template>
+        <NIET_NAT_PERSOON>
+            <xsl:call-template name="rechtspersoon-niet_nat_persoon">
+                <xsl:with-param name="persoon" select="."/>
+            </xsl:call-template>
+        </NIET_NAT_PERSOON>
+        <INGESCHR_NIET_NAT_PERSOON>
+			<RSIN>
+				<xsl:value-of select="pers:identificatie/nen:lokaalId"/>
+			</RSIN>
+			<RECHTSVORM>
+				<xsl:value-of select="pers:rechtsvorm/typ:waarde"/>
+			</RECHTSVORM>
+			<OVRG_PRIVAATR_RECHTSVORM>
+			</OVRG_PRIVAATR_RECHTSVORM>
+			<PUBLIEKRECHTELIJKE_RECHTSVORM></PUBLIEKRECHTELIJKE_RECHTSVORM>
+			<STATUTAIRE_ZETEL>
+				<xsl:value-of select="pers:statutaireZetel"/>
+			</STATUTAIRE_ZETEL>
+        </INGESCHR_NIET_NAT_PERSOON>
+    </xsl:template>
+    
+    <xsl:template match="/snp:KadastraalObjectSnapshot/pers:RechtsPersoon">
+        <xsl:call-template name="persoon">
+            <xsl:with-param name="persoon" select="."/>
+        </xsl:call-template>
+        <NIET_NAT_PERSOON>
+            <xsl:call-template name="rechtspersoon-niet_nat_persoon">
+                <xsl:with-param name="persoon" select="."/>
+            </xsl:call-template>
+        </NIET_NAT_PERSOON>
+        <INGESCHR_NIET_NAT_PERSOON>
+            <RSIN>
+                <xsl:choose>
+                    <xsl:when test="nhr:RSIN"><xsl:value-of select="nhr:RSIN/text()"/></xsl:when>
+                    <xsl:otherwise><xsl:value-of select="nhr:KVKnummer"/></xsl:otherwise>
+                </xsl:choose>
+            </RSIN>
+            <FK_NIET_NAT_PERSOON>
+                <xsl:call-template name="nen_identificatie">
+					<xsl:with-param name="id" select="pers:identificatie"/>
+				</xsl:call-template>
+            </FK_NIET_NAT_PERSOON>
+            <RECHTSVORM>
+                <xsl:value-of select="nhr:rechtsvorm/typ:waarde"/>
+            </RECHTSVORM>
+            <STATUTAIRE_ZETEL>
+                <xsl:value-of select="nhr:statutaireZetel"/>
+            </STATUTAIRE_ZETEL>
+        </INGESCHR_NIET_NAT_PERSOON>
+    </xsl:template>
+	
+    <!-- templates voor persoon -->
+    <xsl:template name="persoon">
+        <xsl:param name="persoon"/>
+        <SUBJECT>
+			<IDENTIF>							
+                <xsl:call-template name="nen_identificatie">
+					<xsl:with-param name="id" select="$persoon/pers:identificatie"/>
+				</xsl:call-template>
+			</IDENTIF>
+        </SUBJECT>
+        <PERSOON>
+            <PK_SUBJECT>				
+                <xsl:call-template name="nen_identificatie">
+					<xsl:with-param name="id" select="$persoon/pers:identificatie"/>
+				</xsl:call-template>
+            </PK_SUBJECT>
+        </PERSOON>
+    </xsl:template>
+    	
+    <xsl:template name="geregistreerd_persoon-ingeschr_nat_persoon">
+        <xsl:param name="persoon"/>
+        <BURGERSERVICENUMMER>
+        <!-- in levering allemaal het zelfde, dus tijdelijk de lokaal id;-->
+            <!--xsl:value-of select="$persoon/gba:BSN"/-->
+            <xsl:value-of select="$persoon/pers:identificatie/nen:lokaalId"/>
+        </BURGERSERVICENUMMER>
+        <FK_NAT_PERSOON>
+            <xsl:call-template name="nen_identificatie">
+				<xsl:with-param name="id" select="$persoon/pers:identificatie"/>
+			</xsl:call-template>
+        </FK_NAT_PERSOON>
+        <GB_GEBOORTEPLAATS>
+            <xsl:value-of select="$persoon/gba:geboorte/gba:geboorteplaats"/>
+        </GB_GEBOORTEPLAATS>
+        <GB_GEBOORTELAND>
+            <xsl:value-of select="$persoon/gba:geboorte/gba:geboorteland"/>
+        </GB_GEBOORTELAND>
+        <GB_GEBOORTEDATUM>
+            <xsl:value-of select="$persoon/gba:geboorte/gba:geboortedatum"/>
+        </GB_GEBOORTEDATUM>
+        <OL_OVERLIJDENSDATUM>
+            <xsl:value-of select="$persoon/gba:overlijden/gba:datumOverlijden"/>
+        </OL_OVERLIJDENSDATUM>
+    </xsl:template>
+    
+    <xsl:template name="geregistreerd_persoon-nat_persoon">
+        <xsl:param name="persoon"/>
+        <PK_PERSOON>
+			<xsl:call-template name="nen_identificatie">
+				<xsl:with-param name="id" select="$persoon/pers:identificatie"/>
+			</xsl:call-template>
+        </PK_PERSOON>
+        <NM_GESLACHTSNAAM>
+            <xsl:value-of select="$persoon/gba:naam/gba:geslachtsnaam"/>
+        </NM_GESLACHTSNAAM>  
+        <NM_VOORNAMEN>
+            <xsl:value-of select="$persoon/gba:naam/gba:voornamen"/>
+        </NM_VOORNAMEN>         
+        <NM_VOORVOEGSEL_GESLACHTSNAAM>
+            <xsl:value-of select="$persoon/gba:naam/gba:voorvoegselsgeslachtsnaam"/>
+        </NM_VOORVOEGSEL_GESLACHTSNAAM>
+        <GESLACHTSAAND>
+            <xsl:value-of select="$persoon/gba:geslacht/gba:geslachtsaanduiding/typ:code"/>
+        </GESLACHTSAAND>
+        <AAND_NAAMGEBRUIK>
+            <xsl:value-of select="$persoon/gba:aanduidingNaamgebruik/typ:code"/>
+        </AAND_NAAMGEBRUIK>
+    </xsl:template>
+    <xsl:template name="rechtspersoon-niet_nat_persoon">
+        <xsl:param name="persoon"/>
+        <NAAM>
+            <xsl:value-of select="$persoon/pers:naam"/>
+        </NAAM>
+        <PK_PERSOON>
+			<xsl:call-template name="nen_identificatie">
+				<xsl:with-param name="id" select="$persoon/pers:identificatie"/>
+			</xsl:call-template>
+        </PK_PERSOON>
+    </xsl:template>
+    
+	<xsl:template name="nen_identificatie">
+		<xsl:param name="id"/>
+		<xsl:value-of select="$id/nen:namespace"/>.<xsl:value-of select="$id/nen:lokaalId"/>		
+	</xsl:template>
+</xsl:stylesheet>
